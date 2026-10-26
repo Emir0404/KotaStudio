@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="bs">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>@(ViewData["Title"] ?? "Kota – arhitektonski studio, Sarajevo")</title>
+    <meta name="description" content="@(ViewData["Description"] ?? "Kota je arhitektonski studio iz Sarajeva. Projektujemo zgrade koje se ne dovikuju, nego traju.")">
+    <meta name="theme-color" content="#f2f0ec">
+    <meta property="og:title" content="@(ViewData["Title"] ?? "Kota – arhitektonski studio, Sarajevo")">
+    <meta property="og:description" content="@(ViewData["Description"] ?? "Arhitektura i enterijer iz Sarajeva.")">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/img/hero.jpg">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preload" href="/fonts/outfit-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <script>document.documentElement.classList.add('js')</script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+</head>
+<body>
+    <a class="preskoci" href="#sadrzaj">Preskoči na sadržaj</a>
+
+    <header class="zaglavlje" id="zaglavlje">
+        <a class="logo" href="/" aria-label="Kota, na početnu">KOTA<span class="logo-tacka" aria-hidden="true"></span></a>
+        <nav class="nav" aria-label="Glavni meni">
+            <a href="/#projekti">Projekti</a>
+            <a href="/#pristup">Pristup</a>
+            <a href="/#studio">Studio</a>
+            <a href="/#kontakt">Kontakt</a>
+        </nav>
+        <a class="zaglavlje-tel" href="tel:@Sadrzaj.TelefonLink">@Sadrzaj.Telefon</a>
+        <button class="meni-dugme" type="button" aria-expanded="false" aria-controls="meni" id="meni-dugme">
+            <span class="meni-tekst">Meni</span><span class="meni-crte" aria-hidden="true"></span>
+        </button>
+    </header>
+
+    <div class="meni" id="meni" aria-hidden="true">
+        <nav aria-label="Meni preko cijelog ekrana">
+            <a href="/#projekti"><span>01</span>Projekti</a>
+            <a href="/#pristup"><span>02</span>Pristup</a>
+            <a href="/#studio"><span>03</span>Studio</a>
+            <a href="/#kontakt"><span>04</span>Kontakt</a>
+        </nav>
+        <p class="meni-dno">@Sadrzaj.Adresa<br><a href="mailto:@Sadrzaj.Eposta">@Sadrzaj.Eposta</a></p>
+    </div>
+
+    <div class="kursor" id="kursor" aria-hidden="true"><span></span></div>
+
+    <main id="sadrzaj">
+        @RenderBody()
+    </main>
+
+    <footer class="podnozje">
+        <div class="podnozje-red">
+            <p class="demo">Demo stranica: studio, projekti, osobe i kontakt podaci su izmišljeni i služe samo za prikaz izrade web stranice.</p>
+            <a class="gore" href="#vrh">Na vrh ↑</a>
+        </div>
+        <p class="izvori">Fotografije: Pexels (besplatna licenca) –
+            @foreach (var izvor in Sadrzaj.Izvori)
+            {
+                <a href="@izvor.Adresa" rel="noopener" target="_blank">@izvor.Autor</a>@(izvor == Sadrzaj.Izvori[^1] ? "." : ", ")
+            }
+        </p>
+        <p class="znak">© @DateTime.Now.Year Kota arhitekti · napravljeno u ASP.NET Core</p>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

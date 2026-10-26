@@ -1,0 +1,170 @@
+@page "/"
+@model IndexModel
+@{
+    ViewData["Title"] = "Kota – arhitektonski studio, Sarajevo";
+    ViewData["Description"] = "Kota je arhitektonski studio iz Sarajeva. Projektujemo kuće i zgrade koje se ne dovikuju, nego traju: porodične, stambene i javne.";
+    var brojProjekata = Sadrzaj.Brojke[1];
+}
+
+<section class="hero" id="vrh">
+    <div class="hero-okvir">
+        <div class="hero-slika" data-paralaksa="0.12">
+            <img src="/img/hero.jpg" alt="Zaobljene površine svijetle zgrade u bojama pijeska" width="2000" height="1333" fetchpriority="high">
+        </div>
+
+        <h1 class="hero-naslov" aria-label="Gradimo tišinu.">
+            <span class="red" aria-hidden="true"><span>Gradimo</span></span>
+            <span class="red" aria-hidden="true"><span>tišinu.</span></span>
+        </h1>
+
+        <p class="hero-sat"><span>Sarajevo</span> <b data-sat>--:--:--</b></p>
+
+        <div class="hero-dno">
+            <div class="hero-lijevo">
+                <p class="hero-oznaka">Od @Sadrzaj.OsnovanoGodine. · Sarajevo</p>
+                <p class="hero-tekst">Živite u kući koja govori sama za sebe.</p>
+                <a class="dugme-linija" href="#projekti"><span>Pogledajte projekte</span></a>
+            </div>
+
+            <div class="hero-porodice">
+                <span class="krugovi" aria-hidden="true"><i>LK</i><i>DB</i><i>ST</i></span>
+                <span><b>@Sadrzaj.BrojPorodica+</b> porodica živi u našim kućama</span>
+            </div>
+
+            <div class="hero-desno">
+                <div class="hero-slicice" aria-hidden="true">
+                    <img src="/img/vrelo.jpg" alt="" width="320" height="213" loading="eager">
+                    <img src="/img/avlija.jpg" alt="" width="320" height="213" loading="eager">
+                </div>
+                <div class="hero-kartica">
+                    <b><span data-broj="@brojProjekata.Vrijednost">@brojProjekata.Vrijednost</span>+</b>
+                    <span>Realizovana projekta, od kuća do javnih zgrada</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="onama" id="onama">
+    <p class="oznaka">O nama</p>
+    <p class="izjava" data-rijeci>@Model.IzjavaHtml</p>
+    <div class="onama-red">
+        <ul class="onama-brojke">
+            @foreach (var b in Sadrzaj.Brojke.Where((_, i) => i is 0 or 3))
+            {
+                <li><b><span data-broj="@b.Vrijednost">@b.Vrijednost</span>@b.Sufiks</b><span>@b.Naziv</span></li>
+            }
+        </ul>
+        <p class="onama-tekst">Svaku kuću crtamo kao da ćemo u njoj živjeti: pažljivo, bez žurbe i bez ukrasa koji ne služe ničemu. Materijali su domaći, svjetlo je prirodno, a detalji su ručno provjereni.</p>
+        <a class="dugme-linija tamno" href="#projekti"><span>Naši projekti</span></a>
+    </div>
+
+    <ul class="prostori">
+        @foreach (var p in Sadrzaj.Prostori)
+        {
+            <li data-otkrij>
+                <img src="/img/@p.Slika" alt="@p.Alt" width="1000" height="750" loading="lazy">
+                <b>@p.Naslov</b>
+                <span>@p.Opis</span>
+            </li>
+        }
+    </ul>
+</section>
+
+<section class="projekti" id="projekti">
+    <div class="projekti-glava">
+        <h2>Odabrani projekti</h2>
+        <p>@Sadrzaj.Projekti.Count.ToString("00") projekata</p>
+    </div>
+    <div class="radovi">
+        @for (var i = 0; i < Sadrzaj.Projekti.Count; i++)
+        {
+            var p = Sadrzaj.Projekti[i];
+            <article class="rad" data-otkrij>
+                <a class="rad-veza" href="/projekti/@p.Slug" data-kursor="Otvori" aria-label="@p.Naziv, @p.Grad, @p.Godina.">
+                    <div class="rad-slika" data-paralaksa-unutra="0.09">
+                        <img src="/img/@p.Slika" alt="@p.Opis" width="1600" height="1067" loading="@(i < 2 ? "eager" : "lazy")"
+                             style="object-position:@p.Pozicija; view-transition-name:p-@p.Slug">
+                    </div>
+                    <div class="rad-info">
+                        <span class="rad-broj">@((i + 1).ToString("00"))</span>
+                        <h3>@p.Naziv</h3>
+                        <p class="rad-uvod">@p.Uvod</p>
+                        <ul class="rad-meta">
+                            <li>@p.Vrsta</li>
+                            <li>@p.Grad</li>
+                            <li>@p.Godina</li>
+                            <li>@Sadrzaj.Broj(p.Povrsina) m²</li>
+                        </ul>
+                        <span class="rad-dugme" aria-hidden="true">Pogledaj projekat <i>→</i></span>
+                    </div>
+                </a>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="pristup" id="pristup">
+    <div class="pristup-lijevo">
+        <p class="oznaka">Pristup</p>
+        <h2>Kako<br>radimo</h2>
+        <div class="luk" data-paralaksa-unutra="0.12">
+            <img src="/img/puz.jpg" alt="Spiralno stepenište snimljeno odozdo, u bojama pijeska" width="1200" height="800" loading="lazy">
+        </div>
+    </div>
+    <ol class="pristup-koraci">
+        @foreach (var k in Sadrzaj.Pristup)
+        {
+            <li class="korak" data-otkrij>
+                <span class="korak-broj">@k.Broj</span>
+                <h3>@k.Naslov</h3>
+                <p>@k.Tekst</p>
+            </li>
+        }
+    </ol>
+</section>
+
+<section class="studio" id="studio">
+    <figure class="studio-slika" data-otkrij="slika">
+        <img src="/img/studio.jpg" alt="Zaobljena zgrada boje pijeska ispod blagog neba" width="1800" height="1200" loading="lazy">
+        <figcaption>
+            <b>Gradimo domove<br>po mjeri.</b>
+            <span>Mala ekipa, velika pažnja: svaki projekat vodi neko ko ga je i nacrtao.</span>
+        </figcaption>
+    </figure>
+
+    <div class="studio-tekst" data-otkrij>
+        <p class="oznaka">Studio</p>
+        <p>Kota je osnovana @Sadrzaj.OsnovanoGodine. godine u malom ateljeu na Mejtašu i tu je i ostala. Radimo u četvoro, pa nema posrednika između vaše ideje i nacrta.</p>
+        <p>Od porodične kuće do doma kulture, pristup je isti: manje stvari, bolje urađenih.</p>
+    </div>
+
+    <ul class="tim">
+        @foreach (var c in Sadrzaj.Tim)
+        {
+            <li data-otkrij>
+                <span class="monogram" aria-hidden="true">@c.Inicijali</span>
+                <b>@c.Ime</b>
+                <span>@c.Uloga</span>
+            </li>
+        }
+    </ul>
+
+    <figure class="citat" data-otkrij>
+        <blockquote>@Sadrzaj.Citat</blockquote>
+        <figcaption>@Sadrzaj.CitatAutor <em>(izmišljen citat za demo)</em></figcaption>
+    </figure>
+</section>
+
+<section class="kontakt" id="kontakt">
+    <p class="oznaka">Kontakt</p>
+    <h2 class="kontakt-naslov"><span>Razgovarajmo</span><span>o vašoj parceli.</span></h2>
+    <div class="kontakt-red">
+        <a class="dugme magnet" href="mailto:@Sadrzaj.Eposta"><span>@Sadrzaj.Eposta</span></a>
+        <dl class="kontakt-podaci">
+            <div><dt>Telefon</dt><dd><a href="tel:@Sadrzaj.TelefonLink">@Sadrzaj.Telefon</a></dd></div>
+            <div><dt>Atelje</dt><dd>@Sadrzaj.Adresa</dd></div>
+            <div><dt>Radno vrijeme</dt><dd>Pon–Pet, 09:00–17:00</dd></div>
+        </dl>
+    </div>
+</section>

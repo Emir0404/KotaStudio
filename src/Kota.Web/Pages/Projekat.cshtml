@@ -1,0 +1,55 @@
+@page "/projekti/{slug}"
+@model ProjekatModel
+@{
+    var p = Model.Projekat;
+    var sljedeci = Model.Sljedeci;
+    ViewData["Title"] = $"{p.Naziv}, {p.Grad} – Kota";
+    ViewData["Description"] = p.Uvod;
+}
+
+<section class="pr-hero" id="vrh">
+    <div class="pr-okvir">
+        <div class="pr-slika">
+            <img src="/img/@p.Slika" alt="@p.Opis" width="1600" height="1067" fetchpriority="high"
+                 style="object-position:@p.Pozicija; view-transition-name:p-@p.Slug">
+        </div>
+        <div class="pr-naslov">
+            <a class="nazad" href="/#projekti">← Svi projekti</a>
+            <h1>@p.Naziv</h1>
+            <p>@p.Uvod</p>
+        </div>
+    </div>
+</section>
+
+<section class="pr-meta">
+    <dl>
+        <div><dt>Vrsta</dt><dd>@p.Vrsta</dd></div>
+        <div><dt>Mjesto</dt><dd>@p.Grad</dd></div>
+        <div><dt>Godina</dt><dd>@p.Godina</dd></div>
+        <div><dt>Površina</dt><dd>@Sadrzaj.Broj(p.Povrsina) m²</dd></div>
+        <div><dt>Naručilac</dt><dd>@p.Narucilac</dd></div>
+        <div><dt>Stanje</dt><dd>@p.Status</dd></div>
+    </dl>
+</section>
+
+<section class="pr-tekst">
+    <p class="oznaka">Priča o projektu</p>
+    <p class="pr-prica" data-otkrij>@p.Tekst</p>
+</section>
+
+<section class="pr-odluke">
+    <p class="oznaka">Tri odluke</p>
+    <ol>
+        @for (var i = 0; i < p.Odluke.Length; i++)
+        {
+            <li data-otkrij><span>@((i + 1).ToString("00"))</span><p>@p.Odluke[i]</p></li>
+        }
+    </ol>
+</section>
+
+<a class="pr-dalje" href="/projekti/@sljedeci.Slug" data-kursor="Dalje">
+    <img src="/img/@sljedeci.Slika" alt="" width="1400" height="933" loading="lazy" style="object-position:@sljedeci.Pozicija">
+    <span class="oznaka">Sljedeći projekat</span>
+    <strong>@sljedeci.Naziv</strong>
+    <span class="pr-dalje-meta">@sljedeci.Vrsta · @sljedeci.Grad · @sljedeci.Godina</span>
+</a>
